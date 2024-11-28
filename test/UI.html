@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>M3terTally</title>
+  </head>
+
+  <body>
+    <script type="module">
+      import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
+      const TALLY_CONTRACT = "0x392e36F1bB33c2A64EE87B7AE0894Bb71ed1EdEb";
+      const CONTRACT_ABI = [
+        "function read(address source, uint256 tokenId, address verifier) external view returns (uint256)",
+      ];
+      const PROVIDER_URL = "https://ethereum-sepolia-rpc.publicnode.com";
+
+      window.callM3terTally = async function () {
+        try {
+          document.getElementById("error").innerText = "";
+          const source = document.getElementById("Source").value;
+          const tokenId = document.getElementById("tokenId").value;
+          const verifier = document.getElementById("L2Verifier").value;
+          const provider = new ethers.JsonRpcProvider(PROVIDER_URL);
+          const tally = new ethers.Contract(
+            TALLY_CONTRACT,
+            CONTRACT_ABI,
+            provider
+          );
+          document.getElementById("status").innerText = "Fetching tally...";
+          const result = await tally.read(source, tokenId, verifier, {
+            enableCcipRead: true,
+          });
+          document.getElementById("status").innerText = "";
+          // don't use innerText in production as it will be interpreted as HTML
+          document.getElementById("result").innerHTML = `Tally: ${result}`;
+
+          if (
+            result ===
+            "0x0000000000000000000000000000000000000000000000000000000000000000"
+          ) {
+            document.getElementById(
+              "error"
+            ).innerText = `Tally ${tokenId} does not exist in the Contract queried`;
+          }
+        } catch (error) {
+          console.error(error);
+          document.getElementById(
+            "error"
+          ).innerText = `An error occured: ${error}`;
+        }
+      };
+    </script>
+
+    <h1>M3ter Tally</h1>
+
+    <label for="Source">Source:</label>
+    <input
+      type="text"
+      id="Source"
+      name="Source"
+      value="0xd25Cc85a1c87CeB1553e823e46e2890d0a70a33C"
+      style="width: 350px"
+    />
+    <br />
+
+    <br />
+    <label for="tokenId">Token ID:</label>
+    <input
+      type="text"
+      id="tokenId"
+      name="tokenId"
+      value="3"
+      style="width: 500px"
+    />
+    <br />
+
+    <br />
+    <label for="L2Verifier">L2 Verifier:</label>
+    <input
+      type="text"
+      id="L2Verifier"
+      name="L2Verifier"
+      value="0xd25Cc85a1c87CeB1553e823e46e2890d0a70a33C"
+      style="width: 350px"
+    />
+    <br />
+
+    <br />
+    <button onclick="callM3terTally()">Get attestation</button>
+    <div id="status"></div>
+    <br />
+
+    <br />
+    <div id="result"></div>
+    <br />
+
+    <br />
+    <div id="error" style="color: red"></div>
+  </body>
+</html>
