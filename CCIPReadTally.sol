@@ -7,6 +7,7 @@ import {IGatewayVerifier} from "https://github.com/unruggable-labs/unruggable-ga
 
 contract CCIPReadTally is GatewayFetchTarget {
     using GatewayFetcher for GatewayRequest;
+
     address public immutable SOURCE = 0x594C568BB6F559e23F579a5B4F5Eb647B4d39804; // Todo: set actual contract address
     /*________________________________________[ SOURCE CONTRACT STORAGE LAYOUT ]_________________________________________
     | Name       | Type                                              | Slot | Offset | Bytes | Contract                  |
@@ -22,13 +23,13 @@ contract CCIPReadTally is GatewayFetchTarget {
     */
     uint256 public constant TALLY_SLOT = 3; // ...see above table 👆
 
-    function read(address source, uint256 tokenId, IGatewayVerifier verifier) external view returns (uint256) {
+    function read(address source, bytes32 contractId, IGatewayVerifier verifier) external view returns (uint256) {
         if (source == address(0)) source = SOURCE;
         GatewayRequest memory request = GatewayFetcher
         .newRequest(1)       // Specify the number of outputs
         .setTarget(source)   // Specify the contract address
         .setSlot(TALLY_SLOT) // Specify the base slot number
-        .push(tokenId)       // Specify the mapping key you want to read
+        .push(contractId)    // Specify the mapping key you want to read
         .follow()            // Update the VM internal slot pointer to point to that key
         .read()              // Read the value 
         .setOutput(0);       // Set it at output index 0
