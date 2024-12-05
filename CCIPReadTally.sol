@@ -13,14 +13,14 @@ contract CCIPReadTally is GatewayFetchTarget {
     |------------|---------------------------------------------------|------|--------|-------|---------------------------|
     | _paused    | bool                                              | 0    | 0      | 1     | src/Contract.sol:Contract |
     | _roles     | mapping(bytes32 => struct AccessControl.RoleData) | 1    | 0      | 32    | src/Contract.sol:Contract |
-    | registry   | mapping(bytes32 => bytes32)                       | 2    | 0      | 32    | src/Contract.sol:Contract |
-    | revenues   | mapping(address => uint256)                       | 3    | 0      | 32    | src/Contract.sol:Contract |
-    | tally      | mapping(uint256 => uint256)                       | 4    | 0      | 32    | src/Contract.sol:Contract |<<<
-    | tariffs    | mapping(uint256 => struct IContract.Tariff)       | 5    | 0      | 32    | src/Contract.sol:Contract |
-    | modules    | mapping(address => bool)                          | 6    | 0      | 32    | src/Contract.sol:Contract |
+    | modules    | mapping(address => bool)                          | 2    | 0      | 32    | src/Contract.sol:Contract |
+    | tariffs    | mapping(bytes32 => struct IContract.Tariff)       | 3    | 0      | 32    | src/Contract.sol:Contract |
+    | registry   | mapping(bytes32 => bytes32)                       | 4    | 0      | 32    | src/Contract.sol:Contract |
+    | revenues   | mapping(address => uint256)                       | 5    | 0      | 32    | src/Contract.sol:Contract |
+    | tally      | mapping(uint256 => uint256)                       | 6    | 0      | 32    | src/Contract.sol:Contract |<<
     | feeAddress | address                                           | 7    | 0      | 20    | src/Contract.sol:Contract |
     */
-    uint256 public constant TALLY_SLOT = 4; // ...see above table 👆
+    uint256 public constant TALLY_SLOT = 6; // ...see above table 👆
 
     function read(address source, uint256 tokenId, IGatewayVerifier verifier) external view returns (uint256) {
         if (source == address(0)) source = SOURCE;
