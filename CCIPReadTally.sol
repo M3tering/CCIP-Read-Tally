@@ -8,20 +8,19 @@ import {IGatewayVerifier} from "https://github.com/unruggable-labs/unruggable-ga
 contract CCIPReadTally is GatewayFetchTarget {
     using GatewayFetcher for GatewayRequest;
     address public immutable SOURCE = 0x594C568BB6F559e23F579a5B4F5Eb647B4d39804; // Todo: set actual contract address
-    /*___________________________________________[ SOURCE CONTRACT STORAGE LAYOUT ]____________________________________________
-    | Name            | Type                                              | Slot | Offset | Bytes | Contract                  |
-    |-----------------|---------------------------------------------------|------|--------|-------|---------------------------|
-    | _paused         | bool                                              | 0    | 0      | 1     | src/Contract.sol:Contract |
-    | _roles          | mapping(bytes32 => struct AccessControl.RoleData) | 1    | 0      | 32    | src/Contract.sol:Contract |
-    | modules         | mapping(address => bool)                          | 2    | 0      | 32    | src/Contract.sol:Contract |
-    | tariffs         | mapping(uint256 => struct Tariff)                 | 3    | 0      | 32    | src/Contract.sol:Contract |
-    | contractByM3ter | mapping(uint256 => string)                        | 4    | 0      | 32    | src/Contract.sol:Contract |
-    | m3terByContract | mapping(string => uint256)                        | 5    | 0      | 32    | src/Contract.sol:Contract |
-    | revenues        | mapping(address => uint256)                       | 6    | 0      | 32    | src/Contract.sol:Contract |
-    | tally           | mapping(uint256 => uint256)                       | 7    | 0      | 32    | src/Contract.sol:Contract |<<<
-    | feeAddress      | address                                           | 8    | 0      | 20    | src/Contract.sol:Contract |
+    /*________________________________________[ SOURCE CONTRACT STORAGE LAYOUT ]_________________________________________
+    | Name       | Type                                              | Slot | Offset | Bytes | Contract                  |
+    |------------|---------------------------------------------------|------|--------|-------|---------------------------|
+    | _paused    | bool                                              | 0    | 0      | 1     | src/Contract.sol:Contract |
+    | _roles     | mapping(bytes32 => struct AccessControl.RoleData) | 1    | 0      | 32    | src/Contract.sol:Contract |
+    | registry   | mapping(bytes32 => bytes32)                       | 2    | 0      | 32    | src/Contract.sol:Contract |
+    | revenues   | mapping(address => uint256)                       | 3    | 0      | 32    | src/Contract.sol:Contract |
+    | tally      | mapping(uint256 => uint256)                       | 4    | 0      | 32    | src/Contract.sol:Contract |<<<
+    | tariffs    | mapping(uint256 => struct IContract.Tariff)       | 5    | 0      | 32    | src/Contract.sol:Contract |
+    | modules    | mapping(address => bool)                          | 6    | 0      | 32    | src/Contract.sol:Contract |
+    | feeAddress | address                                           | 7    | 0      | 20    | src/Contract.sol:Contract |
     */
-    uint256 public constant TALLY_SLOT = 7; // ...see above table 👆
+    uint256 public constant TALLY_SLOT = 4; // ...see above table 👆
 
     function read(address source, uint256 tokenId, IGatewayVerifier verifier) external view returns (uint256) {
         if (source == address(0)) source = SOURCE;
